@@ -1,0 +1,37 @@
+
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dota 1 Team Draft</title>
+<style>
+body{margin:0;background:#0f1115;color:#e7d9a8;font-family:Georgia,serif;background:radial-gradient(circle,#20252d,#0b0d10)}
+.wrap{max-width:1100px;margin:auto;padding:20px}
+h1{text-align:center;color:#d7b45d;text-shadow:0 0 10px #7f5}
+table{width:100%;border-collapse:collapse}td,th{border:1px solid #6b5a2d;padding:6px}
+input,select{width:100%;background:#1b1f26;color:#fff;border:1px solid #6b5a2d;padding:6px}
+button{display:block;margin:20px auto;padding:14px 30px;background:#70531c;color:#fff;border:none;border-radius:8px;font-size:18px;cursor:pointer;box-shadow:0 0 15px #8f6}
+.cols{display:flex;gap:20px;flex-wrap:wrap}.card{flex:1;min-width:300px;background:#171b22;border:2px solid #6b5a2d;border-radius:12px;padding:15px}
+h2{text-align:center}.spin{animation:flash .15s infinite}@keyframes flash{50%{opacity:.3}}
+</style></head><body><div class='wrap'>
+<h1>⚔ Warcraft III — Dota Allstars Team Draft ⚔</h1>
+<table><tr><th>Игрок</th><th>Уровень</th></tr><tbody id='tb'></tbody></table>
+<button onclick='spin()'>🌀 Крутить барабан</button>
+<div class='cols'><div class='card'><h2>🟢 The Sentinel</h2><div id='a'></div><h3 id='sa'></h3></div>
+<div class='card'><h2>🔴 The Scourge</h2><div id='b'></div><h3 id='sb'></h3></div></div>
+</div>
+<script>
+const tb=document.getElementById('tb');
+for(let i=1;i<=10;i++){tb.innerHTML+=`<tr><td><input id=n${i} placeholder="Игрок ${i}"></td><td><select id=l${i}><option value=1>★</option><option value=2>★★</option><option value=3 selected>★★★</option><option value=4>★★★★</option><option value=5>★★★★★</option></select></td></tr>`}
+function sh(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function make(){
+let p=[];for(let i=1;i<=10;i++){let n=document.getElementById('n'+i).value.trim();if(!n)return alert('Заполните всех игроков');p.push({n,l:+document.getElementById('l'+i).value})}
+let best,d=99;
+for(let k=0;k<6000;k++){let x=sh([...p]);let A=x.slice(0,5),B=x.slice(5);let sa=A.reduce((s,v)=>s+v.l,0),sb=B.reduce((s,v)=>s+v.l,0);if(Math.abs(sa-sb)<d){d=Math.abs(sa-sb);best={A,B,sa,sb};if(d==0)break}}
+a.innerHTML=best.A.map(v=>"⚔ "+v.n+" ("+v.l+"★)").join("<br>");
+b.innerHTML=best.B.map(v=>"☠ "+v.n+" ("+v.l+"★)").join("<br>");
+sa.textContent="Сила: "+best.sa;sb.textContent="Сила: "+best.sb;
+}
+function spin(){
+document.body.classList.add('spin');
+let t=0;let iv=setInterval(()=>{a.innerHTML="🎲 Жеребьевка...";b.innerHTML="🎲 Жеребьевка...";t++;if(t>18){clearInterval(iv);document.body.classList.remove('spin');make();}},150);
+}
+</script></body></html>
